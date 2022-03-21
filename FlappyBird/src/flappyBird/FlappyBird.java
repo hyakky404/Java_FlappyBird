@@ -57,7 +57,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
 
         try
         {
-            File f = new File("score.txt");
+            File f = new File("highest_score.txt");
             FileReader fr = new FileReader(f);
             BufferedReader br = new BufferedReader(fr);
             String line;
@@ -79,6 +79,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
         addColumn(true);
 
         timer.start();
+        System.out.println("Start!");
     }
 
     public void addColumn(boolean start)
@@ -109,10 +110,11 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
     {
         if(gameOver)
         {
-            JOptionPane.showMessageDialog(frame, "Điểm của bạn: " + score + "\n" + "Điểm cao: " + highScore + "\nBấm OK để bắt đầu trò chơi mới");
+            System.out.println("End!");
+            JOptionPane.showMessageDialog(frame,"Score: " + score + "\n" + "High score: " + highScore + "\nClick OK to start new game");
             try
             {
-                File f = new File("score.txt");
+                File f = new File("highest_score.txt");
                 FileWriter fw = new FileWriter(f);
                 String s = String.valueOf(highScore);
                 fw.write(s);
@@ -124,7 +126,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
             }
             finally
             {
-                System.out.println("Score: " + score);
+                System.out.println("Score: " + score + "\n");
             }
             bird = new Rectangle(WIDTH / 2 - 10, HEIGHT / 2 - 10, 40, 40);
             columns.clear();
@@ -159,7 +161,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
         int speed = 10;
         ticks++;
         if(started)
-        {  
+        {
             for(int i = 0; i < columns.size(); i++)
             {
                 Rectangle column = columns.get(i);
@@ -261,11 +263,12 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
             
         if(!started)
         {
-            g.drawString("Click để tiếp tục!", WIDTH / 2 - 130, HEIGHT / 2 - 50);
+            g.drawString("Click to continue!", WIDTH / 2 - 125, HEIGHT / 2 - 50);
         }
 
         if(gameOver)
         {
+            g.drawString("You die!", WIDTH / 2 - 70, HEIGHT / 2 - 100);
             started = false;
         }
         
