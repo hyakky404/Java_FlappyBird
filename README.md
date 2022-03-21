@@ -1,3 +1,2 @@
-# JavaProject
-Bài tập lớn môn Java
-Flappy Bird v0.2
+# Bài tập lớn môn Công nghệ Java
+Flappy Bird v0.3
