@@ -13,7 +13,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -23,188 +26,222 @@ import javax.imageio.ImageIO;
 public class FlappyBird implements ActionListener, MouseListener, KeyListener
 {
     public static FlappyBird flappyBird;
-    private final int CHIEURONG = 800, CHIEUCAO = 800;
-    private JFrame giaoDien;
-    private DoHoa doHoa;
-    private ArrayList<Rectangle> nCot;
-    private Rectangle chim;
-    private Image nhanVat;
-    private int doNay, lucKeo, diem, diemCao;
-    private boolean batDau, ketThuc;
-    private Random ngauNhien;
+    private final int WIDTH = 800, HEIGHT = 800;
+    private JFrame frame;
+    private Render render;
+    private ArrayList<Rectangle> columns;
+    private Rectangle bird;
+    private Image img;
+    private int ticks, motion, score, highScore;
+    private boolean started, gameOver;
+    private Random rnd;
 
     public FlappyBird()
     {
-        giaoDien = new JFrame("Flappy Bird");
-    	Timer thoiGian = new Timer(20, this);
+        frame = new JFrame("Flappy Bird");
+    	Timer timer = new Timer(20, this);
         
-        doHoa = new DoHoa();
-        ngauNhien = new Random();
+        render = new Render();
+        rnd = new Random();
 
-        giaoDien.add(doHoa);
-        giaoDien.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        giaoDien.setSize(CHIEURONG, CHIEUCAO);
-        giaoDien.addMouseListener(this);
-        giaoDien.addKeyListener(this);
-        giaoDien.setResizable(false);
-        giaoDien.setVisible(true);
+        frame.add(render);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(WIDTH, HEIGHT);
+        frame.addMouseListener(this);
+        frame.addKeyListener(this);
+        frame.setResizable(false);
+        frame.setVisible(true);
 
-        chim = new Rectangle(CHIEURONG / 2 - 10, CHIEUCAO / 2 - 10, 40, 40);
-        nCot = new ArrayList<Rectangle>();
+        bird = new Rectangle(WIDTH / 2 - 10, HEIGHT / 2 - 10, 40, 40);
+        columns = new ArrayList<Rectangle>();
 
-        themCot(true);
-        themCot(true);
-        themCot(true);
-        themCot(true);
+        try
+        {
+            File f = new File("score.txt");
+            FileReader fr = new FileReader(f);
+            BufferedReader br = new BufferedReader(fr);
+            String line;
+            while ((line = br.readLine()) != null)
+            {
+                highScore = Integer.parseInt(line);
+            }
+            fr.close();
+            br.close();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error: " + e);
+        }
 
-        thoiGian.start();
+        addColumn(true);
+        addColumn(true);
+        addColumn(true);
+        addColumn(true);
+
+        timer.start();
     }
 
-    public void themCot(boolean start)
+    public void addColumn(boolean start)
     {
-    	int khoangCach = 300;
-        int chieuRong = 100;
-    	int chieuCao = 50 + ngauNhien.nextInt(300);
+    	int space = 300;
+        int width = 100;
+    	int height = 50 + rnd.nextInt(300);
         
     	if(start)
     	{
-            nCot.add(new Rectangle(CHIEURONG + chieuRong + nCot.size() * 300, CHIEUCAO - chieuCao - 120, chieuRong, chieuCao));
-            nCot.add(new Rectangle(CHIEURONG + chieuRong + (nCot.size() - 1) * 300, 0, chieuRong, CHIEUCAO - chieuCao - khoangCach));
+            columns.add(new Rectangle(WIDTH + width + columns.size() * 300, HEIGHT - height - 120, width, height));
+            columns.add(new Rectangle(WIDTH + width + (columns.size() - 1) * 300, 0, width, HEIGHT - height - space));
 	    }
         else
         {
-            nCot.add(new Rectangle(nCot.get(nCot.size() - 1).x + 600, CHIEUCAO - chieuCao - 120, chieuRong, chieuCao));
-            nCot.add(new Rectangle(nCot.get(nCot.size() - 1).x, 0, chieuRong, CHIEUCAO - chieuCao - khoangCach));
+            columns.add(new Rectangle(columns.get(columns.size() - 1).x + 600, HEIGHT - height - 120, width, height));
+            columns.add(new Rectangle(columns.get(columns.size() - 1).x, 0, width, HEIGHT - height - space));
         }
     }
     
-    public void veCot(Graphics g, Rectangle cot)
+    public void paintColumn(Graphics g, Rectangle column)
     {
         g.setColor(Color.green.darker());
-        g.fillRect(cot.x, cot.y, cot.width, cot.height);
+        g.fillRect(column.x, column.y, column.width, column.height);
     }
 
-    public void nhay()
+    public void jump()
     {
-        if(ketThuc)
+        if(gameOver)
         {
-            JOptionPane.showMessageDialog(giaoDien, "Điểm của bạn: " + diem + "\n" + "Điểm cao: " + diemCao + "\nBấm OK để bắt đầu trò chơi mới");
-            chim = new Rectangle(CHIEURONG / 2 - 10, CHIEUCAO / 2 - 10, 40, 40);
-            nCot.clear();
-            lucKeo = 0;
-            diem = 0;
+            JOptionPane.showMessageDialog(frame, "Điểm của bạn: " + score + "\n" + "Điểm cao: " + highScore + "\nBấm OK để bắt đầu trò chơi mới");
+            try
+            {
+                File f = new File("score.txt");
+                FileWriter fw = new FileWriter(f);
+                String s = String.valueOf(highScore);
+                fw.write(s);
+                fw.close();
+            }
+            catch (IOException e)
+            {
+                System.out.println("Error: " + e);
+            }
+            finally
+            {
+                System.out.println("Score: " + score);
+            }
+            bird = new Rectangle(WIDTH / 2 - 10, HEIGHT / 2 - 10, 40, 40);
+            columns.clear();
+            motion = 0;
+            score = 0;
 
-            themCot(true);
-            themCot(true);
-            themCot(true);
-            themCot(true);
+            addColumn(true);
+            addColumn(true);
+            addColumn(true);
+            addColumn(true);
 
-            ketThuc = false;
+            gameOver = false;
         }
         
-        if(!batDau)
+        if(!started)
         {
-            batDau = true;
+            started = true;
         }
-        else if(!ketThuc)
+        else if(!gameOver)
         {
-            if(lucKeo > 0)
+            if(motion > 0)
             {
-                lucKeo = 0;
+                motion = 0;
             }
-            lucKeo -= 10;
+            motion -= 10;
         }
     }
 
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        int vanToc = 10;
-        doNay++;
-        if(batDau)
+        int speed = 10;
+        ticks++;
+        if(started)
         {  
-            for(int i = 0; i < nCot.size(); i++)
+            for(int i = 0; i < columns.size(); i++)
             {
-                Rectangle cot = nCot.get(i);
-                cot.x -= vanToc;
+                Rectangle column = columns.get(i);
+                column.x -= speed;
             }
             
-            if(doNay % 2 == 0 && lucKeo < 15)
+            if(ticks % 2 == 0 && motion < 15)
             {
-                lucKeo += 2;
+                motion += 2;
             }
 
-            for(int i = 0; i < nCot.size(); i++)
+            for(int i = 0; i < columns.size(); i++)
             {
-                Rectangle cot = nCot.get(i);
-                if(cot.x + cot.width < 0)
+                Rectangle column = columns.get(i);
+                if(column.x + column.width < 0)
                 {
-                    nCot.remove(cot);
-                    if(cot.y == 0)
+                    columns.remove(column);
+                    if(column.y == 0)
                     {
-                        themCot(false);
+                        addColumn(false);
                     }
                 }
             }
                 
-            chim.y += lucKeo;
+            bird.y += motion;
 
-            for(Rectangle cot : nCot)
+            for(Rectangle column: columns)
             {
-                if(cot.y == 0 && chim.x + chim.width / 4 > cot.x + cot.width / 2 - 10 && chim.x + chim.width / 4 < cot.x + cot.width / 2 + 10)
+                if(column.y == 0 && bird.x + bird.width / 4 > column.x + column.width / 2 - 10 && bird.x + bird.width / 4 < column.x + column.width / 2 + 10)
                 {
-                    diem++;
+                    score++;
                 }
                         
-                if(cot.intersects(chim))
+                if(column.intersects(bird))
                 {
-                    ketThuc = true;
-                    if(chim.x <= cot.x)
+                    gameOver = true;
+                    if(bird.x <= column.x)
                     {
-                        chim.x = cot.x - chim.width;
+                        bird.x = column.x - bird.width;
                     }
                     else
                     {
-                        if(cot.y != 0)
+                        if(column.y != 0)
                         {
-                            chim.y = cot.y - chim.height;
+                            bird.y = column.y - bird.height;
                         }
-                        else if(chim.y < cot.height)
+                        else if(bird.y < column.height)
                         {
-                            chim.y = cot.height;
+                            bird.y = column.height;
                         }
                     }
                 }
             }
 
-            if(chim.y > CHIEUCAO - 120 || chim.y < 0)
+            if(bird.y > HEIGHT - 120 || bird.y < 0)
             {
-                ketThuc = true;
+                gameOver = true;
             }
-            if(chim.y + lucKeo >= CHIEUCAO - 120)
+            if(bird.y + motion >= HEIGHT - 120)
             {
-                chim.y = CHIEUCAO - 120 - chim.height;
-                ketThuc = true;
+                bird.y = HEIGHT - 120 - bird.height;
+                gameOver = true;
             }
         }
 
-        doHoa.repaint();
+        render.repaint();
     }
 
-    public void taoHinh(Graphics g)
+    public void scene(Graphics g)
     {
         g.setColor(Color.cyan);
-	    g.fillRect(0, 0, CHIEURONG, CHIEUCAO);
+	    g.fillRect(0, 0, WIDTH, HEIGHT);
         
         g.setColor(Color.orange);
-        g.fillRect(0, CHIEUCAO - 120, CHIEURONG, 120);
+        g.fillRect(0, HEIGHT - 120, WIDTH, 120);
             
         g.setColor(Color.green);
-        g.fillRect(0, CHIEUCAO - 120, CHIEURONG, 20);
+        g.fillRect(0, HEIGHT - 120, WIDTH, 20);
         
         try
         {
-            nhanVat = ImageIO.read(new File("bird.png"));
+            img = ImageIO.read(new File("bird.png"));
         }
         catch(IOException e)
         {
@@ -212,33 +249,33 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
         }
 
         g.setColor(Color.red);
-        g.drawImage(nhanVat, chim.x, chim.y, chim.width, chim.height, null);
+        g.drawImage(img, bird.x, bird.y, bird.width, bird.height, null);
 
-        for (Rectangle cot : nCot)
+        for (Rectangle column : columns)
         {
-            veCot(g, cot);
+            paintColumn(g, column);
         }
 
         g.setColor(Color.white);
         g.setFont(new Font("Arial", 1, 35));
             
-        if(!batDau)
+        if(!started)
         {
-            g.drawString("Click để tiếp tục!", CHIEURONG / 2 - 130, CHIEUCAO / 2 - 50);
+            g.drawString("Click để tiếp tục!", WIDTH / 2 - 130, HEIGHT / 2 - 50);
         }
 
-        if(ketThuc)
+        if(gameOver)
         {
-            batDau = false;
+            started = false;
         }
-            
-        if(!ketThuc && batDau)
+        
+        if(!gameOver && started)
         {
-            if(diem > diemCao)
+            if(score > highScore)
             {
-                diemCao = diem;
+                highScore = score;
             }
-            g.drawString(String.valueOf(diem), CHIEURONG / 2, 100);
+            g.drawString(String.valueOf(score), WIDTH / 2, 100);
         }
     }
 
@@ -247,7 +284,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
     {
         if(e.getButton() == MouseEvent.BUTTON1)
         {
-            nhay();
+            jump();
         }
     }
 
@@ -256,7 +293,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
     {
         if(e.getKeyCode() == KeyEvent.VK_F)
         {
-            nhay();
+            jump();
         }
     }
 
