@@ -2,6 +2,7 @@ package flappyBird;
 
 import java.util.ArrayList;
 import java.util.Random;
+
 import java.awt.Rectangle;
 import java.awt.Graphics;
 import java.awt.Color;
@@ -13,11 +14,14 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
@@ -35,6 +39,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
     private int ticks, motion, score, highScore;
     private boolean started, gameOver;
     private Random rnd;
+    private ImageIcon icon = new ImageIcon("bird.png");
 
     public FlappyBird()
     {
@@ -110,8 +115,12 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
     {
         if(gameOver)
         {
-            System.out.println("End!");
-            JOptionPane.showMessageDialog(frame,"Score: " + score + "\n" + "High score: " + highScore + "\nClick OK to start new game");
+            int confirm = JOptionPane.showConfirmDialog(frame, "Score: " + score + "\n" + "High score: " + highScore + "\nClick Yes to start new game or No to exit", "Game Over", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, icon);
+            if(confirm == JOptionPane.NO_OPTION || confirm == JOptionPane.CLOSED_OPTION)
+            {
+                System.exit(0);
+            }
+
             try
             {
                 File f = new File("highest_score.txt");
@@ -126,8 +135,10 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
             }
             finally
             {
-                System.out.println("Score: " + score + "\n");
+                System.out.println("Score: " + score);
+                System.out.println("High score: " + highScore);
             }
+
             bird = new Rectangle(WIDTH / 2 - 10, HEIGHT / 2 - 10, 40, 40);
             columns.clear();
             motion = 0;
@@ -230,7 +241,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
         render.repaint();
     }
 
-    public void scene(Graphics g)
+    public void graphics(Graphics g)
     {
         g.setColor(Color.cyan);
 	    g.fillRect(0, 0, WIDTH, HEIGHT);
@@ -258,7 +269,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
             paintColumn(g, column);
         }
 
-        g.setColor(Color.white);
+        g.setColor(Color.DARK_GRAY);
         g.setFont(new Font("Arial", 1, 35));
             
         if(!started)
@@ -268,7 +279,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
 
         if(gameOver)
         {
-            g.drawString("You die!", WIDTH / 2 - 70, HEIGHT / 2 - 100);
+            g.drawString("Game Over!", WIDTH / 2 - 80, HEIGHT / 2 - 100);
             started = false;
         }
         
@@ -297,6 +308,19 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
         if(e.getKeyCode() == KeyEvent.VK_F)
         {
             jump();
+        }
+        if(e.getKeyCode() == KeyEvent.VK_F1)
+        {
+            JOptionPane.showMessageDialog(frame,"Click Left Mouse or press F to jump!");
+        }
+        if(e.getKeyCode() == KeyEvent.VK_F9)
+        {
+            JOptionPane.showMessageDialog(frame,"Credits\nNguyen Xuan Loc\nNguyen Dinh Quy");
+        }
+        if(e.getKeyCode() == KeyEvent.VK_END)
+        {
+            System.out.println("Congratulation!");
+            JOptionPane.showMessageDialog(frame,"Tôi đã nghe về một loài chim không chân. Chúng cứ bay mãi, bay mãi. Khi mệt, chúng sẽ ngủ trên những cơn gió. Cả đời chỉ duy nhất một lần hạ cánh, đó là khi chúng chết.");
         }
     }
 
