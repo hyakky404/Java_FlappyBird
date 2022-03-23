@@ -38,17 +38,31 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
     private Image img;
     private int ticks, motion, score, highScore;
     private boolean started, gameOver;
+    private Timer timer;
     private Random rnd;
-    private ImageIcon icon = new ImageIcon("bird.png");
+    private ImageIcon icon;
+    private int click;
 
     public FlappyBird()
     {
-        frame = new JFrame("Flappy Bird");
-    	Timer timer = new Timer(20, this);
-        
-        render = new Renderer();
+    	timer = new Timer(20, this);
         rnd = new Random();
+        icon = new ImageIcon("bird.png");
+        
+        gameWindow();
+        readFile();
 
+        bird = new Rectangle(WIDTH / 2 - 10, HEIGHT / 2 - 10, 40, 40);
+        columns = new ArrayList<Rectangle>();
+        addCol();
+        timer.start();
+        System.out.println("Start!");
+    }
+
+    public void gameWindow()
+    {
+        frame = new JFrame("Flappy Bird");
+        render = new Renderer();
         frame.add(render);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(WIDTH, HEIGHT);
@@ -56,10 +70,18 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
         frame.addKeyListener(this);
         frame.setResizable(false);
         frame.setVisible(true);
+    }
 
-        bird = new Rectangle(WIDTH / 2 - 10, HEIGHT / 2 - 10, 40, 40);
-        columns = new ArrayList<Rectangle>();
+    public void addCol()
+    {
+        addColumn(true);
+        addColumn(true);
+        addColumn(true);
+        addColumn(true);
+    }
 
+    public void readFile()
+    {
         try
         {
             File f = new File("highest_score.txt");
@@ -75,16 +97,33 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
         }
         catch (Exception e)
         {
-            System.out.println("Error: " + e);
+            e.printStackTrace();
         }
+        finally
+        {
+            System.out.println("Read File");
+        }
+    }
 
-        addColumn(true);
-        addColumn(true);
-        addColumn(true);
-        addColumn(true);
-
-        timer.start();
-        System.out.println("Start!");
+    public void writerFile()
+    {
+        try
+        {
+            File f = new File("highest_score.txt");
+            FileWriter fw = new FileWriter(f);
+            String s = String.valueOf(highScore);
+            fw.write(s);
+            fw.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            System.out.println("Score: " + score);
+            System.out.println("High score: " + highScore);
+        }
     }
 
     public void addColumn(boolean start)
@@ -120,35 +159,13 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
             {
                 System.exit(0);
             }
-
-            try
-            {
-                File f = new File("highest_score.txt");
-                FileWriter fw = new FileWriter(f);
-                String s = String.valueOf(highScore);
-                fw.write(s);
-                fw.close();
-            }
-            catch (IOException e)
-            {
-                System.out.println("Error: " + e);
-            }
-            finally
-            {
-                System.out.println("Score: " + score);
-                System.out.println("High score: " + highScore);
-            }
-
+            writerFile();
             bird = new Rectangle(WIDTH / 2 - 10, HEIGHT / 2 - 10, 40, 40);
             columns.clear();
             motion = 0;
             score = 0;
-
-            addColumn(true);
-            addColumn(true);
-            addColumn(true);
-            addColumn(true);
-
+            addCol();
+            timer.start();
             gameOver = false;
         }
         
@@ -274,13 +291,15 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
             
         if(!started)
         {
-            g.drawString("Click to continue!", WIDTH / 2 - 125, HEIGHT / 2 - 50);
+            g.drawString("Click LM or press F to jump!", WIDTH / 2 - 210, HEIGHT / 2 - 50);
         }
 
         if(gameOver)
         {
-            g.drawString("Game Over!", WIDTH / 2 - 80, HEIGHT / 2 - 100);
+            g.drawString("Game Over!", WIDTH / 2 - 80, HEIGHT / 2 - 50);
+            System.out.println("Dead!");
             started = false;
+            timer.stop();;
         }
         
         if(!gameOver && started)
@@ -299,6 +318,8 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
         if(e.getButton() == MouseEvent.BUTTON1)
         {
             jump();
+            click++;
+            System.out.println("Click: " + click);
         }
     }
 
@@ -308,6 +329,8 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
         if(e.getKeyCode() == KeyEvent.VK_F)
         {
             jump();
+            click++;
+            System.out.println("Click: " + click);
         }
         if(e.getKeyCode() == KeyEvent.VK_F1)
         {
@@ -315,12 +338,12 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
         }
         if(e.getKeyCode() == KeyEvent.VK_F9)
         {
-            JOptionPane.showMessageDialog(frame,"Credits\nNguyen Xuan Loc\nNguyen Dinh Quy");
+            JOptionPane.showMessageDialog(frame,"Credits\nNguyen Xuan Loc\nNguyen Dinh Quy\nBeta v0.6");
         }
         if(e.getKeyCode() == KeyEvent.VK_END)
         {
-            System.out.println("Congratulation!");
-            JOptionPane.showMessageDialog(frame,"Tôi đã nghe về một loài chim không chân. Chúng cứ bay mãi, bay mãi. Khi mệt, chúng sẽ ngủ trên những cơn gió. Cả đời chỉ duy nhất một lần hạ cánh, đó là khi chúng chết.");
+            System.out.println("Congrats!");
+            JOptionPane.showConfirmDialog(frame, "Tôi đã nghe kể về một loài chim không chân. Chúng cứ bay mãi, bay mãi. Khi mệt, chúng sẽ ngủ trên những cơn gió.\n Cả một đời chỉ duy nhất một lần hạ cánh, đó là khi chúng chết.", "Congrats!", JOptionPane.CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, icon);
         }
     }
 
