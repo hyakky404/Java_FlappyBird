@@ -1,2 +1,2 @@
-# Bài tập lớn môn Công nghệ Java
-Flappy Bird v0.6
+# Project Java
+Flappy Bird v1.0
