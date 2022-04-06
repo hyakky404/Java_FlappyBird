@@ -1,5 +1,3 @@
 # Project Java
-Flappy Bird v1.1
+Flappy Bird v1.2.1
 Nhóm 10
-Nguyễn Đình Quý
-Nguyễn Xuân Lộc
