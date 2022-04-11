@@ -26,6 +26,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
+
 import javax.imageio.ImageIO;
 
 import SQL.Database;
@@ -84,7 +85,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
     {
         try
         {
-            File f = new File("./assets/txt/highest_score.txt");
+            File f = new File("highest_score.txt");
             FileReader fr = new FileReader(f);
             BufferedReader br = new BufferedReader(fr);
             String line;
@@ -106,7 +107,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
     {
         try
         {
-            File f = new File("./assets/txt/highest_score.txt");
+            File f = new File("highest_score.txt");
             FileWriter fw = new FileWriter(f);
             String s = String.valueOf(highScore);
             fw.write(s);
@@ -288,7 +289,8 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
         }
     }
 
-    public static int getScore() {
+    public static int getScore()
+    {
         return score;
     }
 
