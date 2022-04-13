@@ -4,7 +4,7 @@ Bài tập lớn môn Công nghệ Java
 ## Mô tả
 Một trò chơi được làm dựa trên tựa game cùng tên của nhà phát triển Nguyễn Hà Đông.
 
-Trò chơi được phát triển để chạy trên PC và là bài tập lớn để đánh giá quá trình học tập của môn học.
+Trò chơi được phát triển bằng ngôn ngữ lập trình Java, chỉ chạy trên PC và là bài tập lớn để đánh giá quá trình học tập của môn học.
 
 Để chạy trò chơi cần dùng Visual Studio Code hoặc một số IDE khác.
 
@@ -16,10 +16,10 @@ Trò chơi được phát triển để chạy trên PC và là bài tập lớn
 
 ## Tài liệu tham khảo
 
-Github: [https://github.com/Jaryt/FlappyBirdTutorial](https://github.com/Jaryt/FlappyBirdTutorial)
+Github: https://github.com/Jaryt/FlappyBirdTutorial
 
 ## Credits
-Nhóm 20:
+Nhóm 20 - CNTT5:
 
   * 201200304
   * 201210213
