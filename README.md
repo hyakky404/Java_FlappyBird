@@ -19,5 +19,9 @@ Trò chơi được phát triển để chạy trên PC và là bài tập lớn
 Github: [https://github.com/Jaryt/FlappyBirdTutorial](https://github.com/Jaryt/FlappyBirdTutorial)
 
 ## Credits
+Nhóm 20:
+
   * 201200304
   * 201210213
+
+### 2022 - Đại học Giao thông Vận tải
