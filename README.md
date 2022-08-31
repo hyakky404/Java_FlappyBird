@@ -19,7 +19,7 @@ Trò chơi được phát triển bằng ngôn ngữ lập trình Java, chỉ ch
 Github: https://github.com/Jaryt/FlappyBirdTutorial
 
 ## Credits
-Nhóm 20 - CNTT5:
+Nhóm 20 - CNTT5 - K61:
 
   * 201200304
   * 201210213
