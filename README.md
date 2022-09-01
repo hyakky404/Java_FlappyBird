@@ -6,8 +6,6 @@ Một trò chơi được làm dựa trên tựa game cùng tên của nhà phá
 
 Trò chơi được phát triển bằng ngôn ngữ lập trình Java, chỉ chạy trên PC và là bài tập lớn để đánh giá quá trình học tập của môn học.
 
-Để chạy trò chơi cần dùng Visual Studio Code hoặc một số IDE khác.
-
 ## Một số hình ảnh
 ![image](https://user-images.githubusercontent.com/85392867/163222904-8208606e-437b-49d3-82a8-5036878faaa4.png)
 ![image](https://user-images.githubusercontent.com/85392867/163222919-453ff749-87b3-4332-86bd-4febf4a29e0c.png)
@@ -16,7 +14,7 @@ Trò chơi được phát triển bằng ngôn ngữ lập trình Java, chỉ ch
 
 ## Tài liệu tham khảo
 
-Github: https://github.com/Jaryt/FlappyBirdTutorial
+GitHub: https://github.com/Jaryt/FlappyBirdTutorial
 
 ## Credits
 Nhóm 20 - CNTT5 - K61:
