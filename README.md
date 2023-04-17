@@ -15,13 +15,14 @@ Hệ điều hành được hỗ trợ: Windows/macOS/Linux và phải có máy 
 ![image](https://user-images.githubusercontent.com/85392867/163222942-2e2421c9-43d1-43f8-a909-5fc63c0513f7.png)
 
 ## Tài liệu tham khảo
+Oracle: https://docs.oracle.com/en/java/
 
 GitHub: https://github.com/Jaryt/FlappyBirdTutorial
 
 ## Thành viên
 Nhóm 20 - CNTT5 - K61:
 
-  * 201200304
-  * 201210213
+ * 201210213
+ * 201200304
 
 #### 2022. Đại học Giao thông Vận tải
