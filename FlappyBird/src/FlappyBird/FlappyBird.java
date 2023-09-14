@@ -2,7 +2,6 @@ package FlappyBird;
 
 import java.util.ArrayList;
 import java.util.Random;
-
 import java.awt.Rectangle;
 import java.awt.Graphics;
 import java.awt.Color;
@@ -14,21 +13,17 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
-
 import javax.imageio.ImageIO;
-
 import SQL.Database;
 import SQL.scoreList;
 
@@ -89,10 +84,12 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
             FileReader fr = new FileReader(f);
             BufferedReader br = new BufferedReader(fr);
             String line;
+
             while ((line = br.readLine()) != null)
             {
                 highScore = Integer.parseInt(line);
             }
+
             fr.close();
             br.close();
         }
@@ -110,6 +107,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
             File f = new File("highest_score.txt");
             FileWriter fw = new FileWriter(f);
             String s = String.valueOf(highScore);
+
             fw.write(s);
             fw.close();
         }
@@ -150,6 +148,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
             {
                 motion = 0;
             }
+
             motion -= 10;
         }
     }
@@ -159,6 +158,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
     {
         int speed = 10;
         ticks++;
+
         if(startGame)
         {
             for(int i = 0; i < columns.size(); i++)
@@ -178,6 +178,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
                 if(column.x + column.width < 0)
                 {
                     columns.remove(column);
+
                     if(column.y == 0)
                     {
                         addColumn(false);
@@ -210,6 +211,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
         {
             timer.stop();
             writerFile();
+
             try
             {
                 Database.add(new scoreList(FlappyBird.getScore()));
@@ -220,13 +222,20 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
             }
             finally
             {
-                int confirm = JOptionPane.showConfirmDialog(frame, "Score: " + score + "\n" + "Best: " + highScore + "\nNew Game?", "Game Over", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, icon);
+                int confirm = JOptionPane.showConfirmDialog(
+                    frame,
+                    "Score: " + score + "\n" +
+                    "Best: " + highScore +
+                    "\nNew Game?", "Game Over",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE, icon);
+
                 if(confirm == JOptionPane.YES_OPTION)
                 {
                     frame.dispose();
                     flappyBird = new FlappyBird();
                 }
-                else if(confirm == JOptionPane.NO_OPTION || confirm == JOptionPane.CLOSED_OPTION)
+                else
                 {
                     System.exit(0);
                 }
@@ -285,6 +294,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
             {
                 highScore = score;
             }
+
             g.drawString(String.valueOf(score), WIDTH / 2, 100);
         }
     }
@@ -310,17 +320,28 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
         {
             jump();
         }
+
         if(e.getKeyCode() == KeyEvent.VK_F1)
         {
             JOptionPane.showMessageDialog(frame,"Click Left Mouse or press F to jump!");
         }
+
         if(e.getKeyCode() == KeyEvent.VK_F9)
         {
-            JOptionPane.showConfirmDialog(frame, "v1.2.1\nNguyen Dinh Quy\nNguyen Xuan Loc", "About", JOptionPane.CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, icon);
+            JOptionPane.showConfirmDialog(frame, "v1.2.1\nNguyen Dinh Quy\nNguyen Xuan Loc",
+                "About",
+                JOptionPane.CANCEL_OPTION,
+                JOptionPane.INFORMATION_MESSAGE, icon);
         }
+
         if(e.getKeyCode() == KeyEvent.VK_END)
         {
-            JOptionPane.showConfirmDialog(frame, "I have heard about a legless bird. We keep flying, flying. When we are tired, we will sleep on the wind.\nThere's only one landing in a lifetime, and that's when we die.", "Congrats!", JOptionPane.CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, icon);
+            JOptionPane.showConfirmDialog(frame, "I have heard about a legless bird. We keep flying, flying." +
+                "When we are tired, we will sleep on the wind.\nThere's only one landing in a lifetime," +
+                "and that's when we die.",
+                "Congrats!",
+                JOptionPane.CANCEL_OPTION,
+                JOptionPane.INFORMATION_MESSAGE, icon);
         }
     }
 
