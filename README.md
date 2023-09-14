@@ -4,9 +4,13 @@ Bài tập lớn môn Công nghệ Java
 ## Mô tả
 Trò chơi Flappy Bird và là bài tập lớn để đánh giá quá trình học tập của môn học.
 
-Trò chơi được viết bằng ngôn ngữ lập trình Java, nền tảng JDK 17 và được phát triển dựa trên tựa game cùng tên của nhà phát triển Nguyễn Hà Đông.
+Trò chơi được viết bằng ngôn ngữ lập trình Java, phiên bản JDK 17
 
-Hệ điều hành được hỗ trợ: Windows/macOS/Linux và phải có máy ảo Java.
+Được phát triển dựa trên tựa game cùng tên của nhà phát triển Nguyễn Hà Đông.
+
+Cách chơi: Người chơi bấm nút chuột trái hoặc phím F trên bàn phím để cho chim bay qua các ống cột, nếu chim bị rơi hoặc va phải ống thì trò chơi kết thúc.
+
+Hệ điều hành được hỗ trợ: Windows/macOS/Linux và yêu cầu cài đặt Java.
 
 ## Một số hình ảnh
 ![image](https://user-images.githubusercontent.com/85392867/163222904-8208606e-437b-49d3-82a8-5036878faaa4.png)
