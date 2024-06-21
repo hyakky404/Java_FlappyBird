@@ -26,7 +26,7 @@ GitHub: https://github.com/Jaryt/FlappyBirdTutorial
 ## Thành viên
 Nhóm 20 - CNTT5 - K61:
 
- * 201210213
  * 201200304
+ * 201210213
 
 #### 2022. Đại học Giao thông Vận tải
