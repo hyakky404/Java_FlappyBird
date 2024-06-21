@@ -31,12 +31,12 @@ public class Database
         return conn;
     }
     
-    public static ArrayList<ScoreList> sAll()
+    public static ArrayList<Score> sAll()
     {
         Database connectDatabase = new Database(); 
         Connection conn = connectDatabase.connect();
         String sql = "SELECT * FROM `score`";
-        ArrayList <ScoreList> list = new ArrayList<>();
+        ArrayList <Score> list = new ArrayList<>();
 
         try
         {
@@ -46,7 +46,7 @@ public class Database
             while (rs.next())
             {
                 int score = rs.getInt("score");
-                list.add(new ScoreList(score));
+                list.add(new Score(score));
             }
 
             conn.close();
@@ -61,7 +61,7 @@ public class Database
         return list;
     }
     
-    public static void add(ScoreList list) throws SQLException
+    public static void add(Score list) throws SQLException
     {
         Database connectDatabase = new Database(); 
         Connection conn = connectDatabase.connect();
@@ -84,7 +84,7 @@ public class Database
         }
     }
 
-    public static void deleteAll(ScoreList list) throws SQLException
+    public static void deleteAll(Score list) throws SQLException
     {
         Database connectDatabase = new Database(); 
         Connection conn = connectDatabase.connect();
