@@ -4,7 +4,7 @@ Bài tập lớn môn Công nghệ Java
 ## Mô tả
 Trò chơi Flappy Bird và là bài tập lớn để đánh giá quá trình học tập của môn học.
 
-Trò chơi được viết bằng ngôn ngữ lập trình Java, phiên bản JDK 21.
+Trò chơi được viết bằng ngôn ngữ lập trình Java phiên bản JDK 21 và công nghệ MySQL.
 
 Được phát triển dựa trên tựa game cùng tên của nhà phát triển Nguyễn Hà Đông.
 
