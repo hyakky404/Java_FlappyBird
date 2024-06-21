@@ -1,14 +1,12 @@
 package SQL;
 
-public class scoreList
+public class ScoreList
 {
     private int score;
 
-    public scoreList()
-    {
-    }
+    public ScoreList() { }
     
-    public scoreList(int _score)
+    public ScoreList(int _score)
     {
         score = _score;
     }

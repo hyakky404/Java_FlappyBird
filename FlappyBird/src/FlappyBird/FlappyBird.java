@@ -1,5 +1,4 @@
 package FlappyBird;
-
 import java.util.ArrayList;
 import java.util.Random;
 import java.awt.Rectangle;
@@ -25,11 +24,10 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.imageio.ImageIO;
 import SQL.Database;
-import SQL.scoreList;
+import SQL.ScoreList;
 
 public class FlappyBird implements ActionListener, MouseListener, KeyListener
 {
-    public static FlappyBird flappyBird;
     private final int WIDTH = 800, HEIGHT = 800;
     private JFrame frame;
     private Renderer render;
@@ -43,6 +41,8 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
     private static int score;
     private int highScore;
     private boolean startGame, gameOver;
+
+    public static FlappyBird flappyBird;
 
     public FlappyBird()
     {
@@ -93,7 +93,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
             fr.close();
             br.close();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
             highScore = 0;
@@ -111,7 +111,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
             fw.write(s);
             fw.close();
         }
-        catch(IOException e)
+        catch (IOException e)
         {
             e.printStackTrace();
         }
@@ -124,7 +124,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
         int space = 300;
     	int height = 50 + rnd.nextInt(300);
         
-    	if(start)
+    	if (start)
     	{
             columns.add(new Rectangle(WIDTH + width + columns.size() * 300, HEIGHT - height - 120, width, height));
             columns.add(new Rectangle(WIDTH + width + (columns.size() - 1) * 300, 0, width, HEIGHT - height - space));
@@ -138,13 +138,13 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
 
     public void jump()
     {   
-        if(!startGame)
+        if (!startGame)
         {
             startGame = true;
         }
-        else if(!gameOver)
+        else if (!gameOver)
         {
-            if(motion > 0)
+            if (motion > 0)
             {
                 motion = 0;
             }
@@ -159,27 +159,28 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
         int speed = 10;
         ticks++;
 
-        if(startGame)
+        if (startGame)
         {
-            for(int i = 0; i < columns.size(); i++)
+            for (int i = 0; i < columns.size(); i++)
             {
                 Rectangle column = columns.get(i);
                 column.x -= speed;
             }
             
-            if(ticks % 2 == 0)
+            if (ticks % 2 == 0)
             {
                 motion += 2;
             }
 
-            for(int i = 0; i < columns.size(); i++)
+            for (int i = 0; i < columns.size(); i++)
             {
                 Rectangle column = columns.get(i);
-                if(column.x + column.width < 0)
+
+                if (column.x + column.width < 0)
                 {
                     columns.remove(column);
 
-                    if(column.y == 0)
+                    if (column.y == 0)
                     {
                         addColumn(false);
                     }
@@ -188,35 +189,35 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
                 
             bird.y += motion;
 
-            for(Rectangle column: columns)
+            for (Rectangle column: columns)
             {
-                if(column.y == 0 && bird.x + bird.width / 4 > column.x + column.width / 2 - 10 && bird.x + bird.width / 4 < column.x + column.width / 2 + 10)
+                if (column.y == 0 && bird.x + bird.width / 4 > column.x + column.width / 2 - 10 && bird.x + bird.width / 4 < column.x + column.width / 2 + 10)
                 {
                     score++;
                 }
 
-                if(column.intersects(bird))
+                if (column.intersects(bird))
                 {
                     gameOver = true;
                 }
             }
 
-            if(bird.y > HEIGHT - 150 || bird.y < 0)
+            if (bird.y > HEIGHT - 150 || bird.y < 0)
             {
                 gameOver = true;
             }
         }
 
-        if(gameOver)
+        if (gameOver)
         {
             timer.stop();
             writerFile();
 
             try
             {
-                Database.add(new scoreList(FlappyBird.getScore()));
+                Database.add(new ScoreList(FlappyBird.getScore()));
             }
-            catch(SQLException se)
+            catch (SQLException se)
             {
                 se.printStackTrace();
             }
@@ -230,7 +231,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.INFORMATION_MESSAGE, icon);
 
-                if(confirm == JOptionPane.YES_OPTION)
+                if (confirm == JOptionPane.YES_OPTION)
                 {
                     frame.dispose();
                     flappyBird = new FlappyBird();
@@ -266,7 +267,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
         {
             imgBird = ImageIO.read(new File("./assets/img/bird.png"));
         }
-        catch(IOException e)
+        catch (IOException e)
         {
             g.setColor(Color.orange);
             g.fillRect(bird.x, bird.y, bird.width, bird.height);
@@ -275,7 +276,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
         g.setColor(Color.red);
         g.drawImage(imgBird, bird.x, bird.y, bird.width, bird.height, null);
 
-        for(Rectangle column: columns)
+        for (Rectangle column: columns)
         {
             paintColumn(g, column);
         }
@@ -283,14 +284,14 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", 1, 35));
             
-        if(!startGame)
+        if (!startGame)
         {
             g.drawString("GET READY!", WIDTH / 2 - 90, HEIGHT / 2 - 50);
         }
 
-        if(!gameOver && startGame)
+        if (!gameOver && startGame)
         {
-            if(score > highScore)
+            if (score > highScore)
             {
                 highScore = score;
             }
@@ -307,7 +308,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
     @Override
     public void mouseClicked(MouseEvent e)
     {
-        if(e.getButton() == MouseEvent.BUTTON1)
+        if (e.getButton() == MouseEvent.BUTTON1)
         {
             jump();
         }
@@ -316,64 +317,52 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
     @Override
     public void keyReleased(KeyEvent e)
     {
-        if(e.getKeyCode() == KeyEvent.VK_F)
+        if (e.getKeyCode() == KeyEvent.VK_F)
         {
             jump();
         }
 
-        if(e.getKeyCode() == KeyEvent.VK_F1)
+        if (e.getKeyCode() == KeyEvent.VK_F1)
         {
             JOptionPane.showMessageDialog(frame,"Click Left Mouse or press F to jump!");
         }
 
-        if(e.getKeyCode() == KeyEvent.VK_F9)
+        if (e.getKeyCode() == KeyEvent.VK_F9)
         {
-            JOptionPane.showConfirmDialog(frame, "v1.2.1\nNguyen Dinh Quy\nNguyen Xuan Loc",
+            JOptionPane.showMessageDialog(frame, "v1.2.5\n201200304\n201210213",
                 "About",
-                JOptionPane.CANCEL_OPTION,
-                JOptionPane.INFORMATION_MESSAGE, icon);
+                JOptionPane.INFORMATION_MESSAGE,
+                icon);
         }
 
-        if(e.getKeyCode() == KeyEvent.VK_END)
+        if (e.getKeyCode() == KeyEvent.VK_END)
         {
-            JOptionPane.showConfirmDialog(frame, "I have heard about a legless bird. We keep flying, flying." +
-                "When we are tired, we will sleep on the wind.\nThere's only one landing in a lifetime," +
+            JOptionPane.showMessageDialog(frame, "I have heard about a legless bird. We keep flying, flying. " +
+                "When we are tired, we will sleep on the wind.\nThere's only one landing in a lifetime, " +
                 "and that's when we die.",
-                "Congrats!",
-                JOptionPane.CANCEL_OPTION,
-                JOptionPane.INFORMATION_MESSAGE, icon);
+                "Story about the bird",
+                JOptionPane.INFORMATION_MESSAGE,
+                icon);
         }
     }
 
     @Override
-    public void mousePressed(MouseEvent e)
-    {
-    }
+    public void mousePressed(MouseEvent e) { }
 
     @Override
-    public void mouseReleased(MouseEvent e)
-    {
-    }
+    public void mouseReleased(MouseEvent e) { }
 
     @Override
-    public void mouseEntered(MouseEvent e)
-    {
-    }
+    public void mouseEntered(MouseEvent e) { }
 
     @Override
-    public void mouseExited(MouseEvent e)
-    {
-    }
+    public void mouseExited(MouseEvent e) { }
 
     @Override
-    public void keyTyped(KeyEvent e)
-    {
-    }
+    public void keyTyped(KeyEvent e) { }
 
     @Override
-    public void keyPressed(KeyEvent e)
-    {
-    }
+    public void keyPressed(KeyEvent e) { }
 
     public static void main(String[] args) throws Exception
     {
