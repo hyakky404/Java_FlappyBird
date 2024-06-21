@@ -24,7 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.imageio.ImageIO;
 import SQL.Database;
-import SQL.Score;
+import SQL.ScoreList;
 
 public class FlappyBird implements ActionListener, MouseListener, KeyListener
 {
@@ -215,7 +215,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener
 
             try
             {
-                Database.add(new Score(FlappyBird.getScore()));
+                Database.add(new ScoreList(FlappyBird.getScore()));
             }
             catch (SQLException se)
             {
